@@ -1,8 +1,9 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
 #include <string>
 #include <cstdlib>
 #include <climits>
+#include <limits>
 #include <algorithm>
 #include <cctype>
 using namespace std;
@@ -130,19 +131,19 @@ int login()
     }
     cout << "Enter password: ";
     getline(cin, password);
-   password.erase(remove(password.begin(), password.end(), ' '), password.end());//remove spaces
-        for (size_t i = 0; i < accounts.size(); i++)
+    password.erase(remove(password.begin(), password.end(), ' '), password.end());//remove spaces
+    for (size_t i = 0; i < accounts.size(); i++)
+    {
+        // print data after login
+        if (accounts[i].id == accNum && accounts[i].password == password)
         {
-            // print data after login
-            if (accounts[i].id == accNum && accounts[i].password == password)
-            {
-                cout << "\nAccount ID: " << accNum << endl;
-                cout << "Balance: " << accounts[i].balance << endl;
-                cout << "\033[32m" << "Login successful" << "\033[0m" << endl;
-                return i;
-                break;
-            }
+            cout << "\nAccount ID: " << accNum << endl;
+            cout << "Balance: " << accounts[i].balance << endl;
+            cout << "\033[32m" << "Login successful" << "\033[0m" << endl;
+            return i;
+            break;
         }
+    }
 
     cout << "\033[31m" << "Invalid ID or password" << "\033[0m" << endl;
     return -1;
@@ -260,7 +261,7 @@ void transferMoney(int senderIndex)
         cout << "\033[31m" << "Fail Input" << "\033[0m" << endl;
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-       return;
+        return;
     }
 
     // verify validity of the amount
@@ -306,6 +307,17 @@ void closeAccount()
     {
         if (accounts[i].id == accNum)
         {
+            // ask for the password before closing the account
+            string password;
+            cout << "Enter password: ";
+            getline(cin, password);
+            password.erase(remove(password.begin(), password.end(), ' '), password.end());//remove spaces
+            if (accounts[i].password != password)
+            {
+                cout << "\033[31m" << "Invalid password" << "\033[0m" << endl;
+                return;
+            }
+
             cout << "\033[34m" << "Are you sure to close account ? y : n" << "\033[0m" << endl;
             char confirm;
             cin >> confirm;
