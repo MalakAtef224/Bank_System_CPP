@@ -88,7 +88,7 @@ void createAccount()
             cout << "\033[31m" << "Fail Input" << "\033[0m" << endl;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            break;
+            continue;
         }
         // balance must at least 1000
         if (newAcc.balance < 1000)
